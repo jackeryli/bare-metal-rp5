@@ -5,17 +5,24 @@ OBJCPY = $(TOOLCHAIN_PREFIX)objcopy
 
 CFLAGS = -Wall
 
-# QEMUOPTS = -machine virt -cpu cortex-a76 -bios none m 128M -smp $(nproc) -nographic
-# QEMUOPTS += -drive file=kernel8.img,if=none,format=raw,id=x0
-# QEMUOPTS += -device virtio-blk-device,drive=x0,bus=virtio-mmio-bus.0
+SRCS = start.c uart.c
+OBJS = $(SRCS:.c=.o)
 
 all: clean kernel8.img
 
 entry.o: entry.S
 	$(CC) $(CFLAGS) -c entry.S -o entry.o
 
-kernel8.img: entry.o
-	$(LD) -T kernel.ld -o kernel8.elf entry.o
+# Rule to compile .c files to .o files
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Linking the object files to create kernel8.elf
+kernel8.elf: entry.o $(OBJS)
+	$(LD) -T kernel.ld -o kernel8.elf entry.o $(OBJS)
+
+# Convert kernel8.elf to kernel8.img
+kernel8.img: kernel8.elf
 	$(OBJCPY) -O binary kernel8.elf kernel8.img
 
 clean:
@@ -24,5 +31,5 @@ clean:
 check-asm:
 	qemu-system-aarch64 -M raspi3b -kernel kernel8.img -display none -d in_asm
 
-qemu:
+qemu: kernel8.img
 	qemu-system-aarch64 -M raspi3b -kernel kernel8.img -display none -serial null -serial stdio

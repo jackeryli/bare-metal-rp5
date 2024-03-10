@@ -1,4 +1,5 @@
 #include "defs.h"
+#include "arm64.h"
 
 #define NCOMMANDS 4
 
@@ -98,6 +99,10 @@ hello(char**)
 int
 timestamp(char**)
 {
+  uint64 cnt = r_cntpct_el0();
+  uint64 freq = r_cntfrq_el0();
+  printk(cnt);
+  printk(freq);
   return 0;
 }
 

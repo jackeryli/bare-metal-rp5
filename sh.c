@@ -83,9 +83,6 @@ help(char**)
 {
   for(int i=0; i<NCOMMANDS; i++){
     if(i != 0) printk("\n");
-    // printk(cmds[i].name);
-    // printk(": ");
-    // printk(cmds[i].msg);
     printk("%s: %s", cmds[i].name, cmds[i].msg);
   }
   return 0;

@@ -5,7 +5,7 @@ OBJCPY = $(TOOLCHAIN_PREFIX)objcopy
 
 CFLAGS = -Wall
 
-SRCS = start.c uart.c printk.c
+SRCS = start.c uart.c printk.c string.c sh.c
 OBJS = $(SRCS:.c=.o)
 
 all: clean kernel8.img

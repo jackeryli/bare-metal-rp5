@@ -25,9 +25,8 @@ uartinit(void)
 void
 uartputc(int c)
 {
-  while(!(*AUX_MU_LSR_REG & 0x20)){
-    asm volatile("nop");
-  }
+  while(!(*AUX_MU_LSR_REG & 0x20));
+
   *AUX_MU_IO_REG = c;
 }
 
@@ -40,11 +39,17 @@ uartputc(int c)
 int
 uartgetc(void)
 {
-  while(!AUX_MU_LSR_REG & 0x1){
-    asm volatile("nop");
-  }
+  while(!(*AUX_MU_LSR_REG & 0x01));
 
   int c = *AUX_MU_IO_REG;
   c = (c == '\r') ? '\n' : c;
   return c;
+}
+
+void
+uartflush()
+{
+  while(*AUX_MU_LSR_REG & 0x01){
+    *AUX_MU_IO_REG;
+  }
 }

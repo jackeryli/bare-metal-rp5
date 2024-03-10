@@ -1,5 +1,5 @@
 #include "aux.h"
-#include "uart.h"
+#include "defs.h"
 
 void
 uartinit(void)

@@ -6,15 +6,16 @@ uartinit(void)
 {
   *AUX_ENABLES |= 1; /* Enable mini UART */
 
-  *AUX_MU_CNTL_REG = 0;
-  *AUX_MU_LCR_REG = 3;
-  *AUX_MU_MCR_REG = 0;
-  *AUX_MU_IER_REG = 0;
-  *AUX_MU_IIR_REG = 6;  /* clear receive/transmit FIFO */
-  *AUX_MU_BAUD_REG = 270;
+  *AUX_MU_CNTL_REG = 0;   /* Disable transmitter and receiver during configuration */
+  *AUX_MU_LCR_REG = 3;    /* 8-bit mode */
+  *AUX_MU_MCR_REG = 0;    /* Disable RTS line */
+  *AUX_MU_IER_REG = 0;    /* Disable interrupts */
+  *AUX_MU_IIR_REG = 6;    /* Clear receive/transmit FIFO */
+  *AUX_MU_BAUD_REG = 270; /* Set baud rate to 115200 */
 
-  *AUX_MU_CNTL_REG = 3;    /* Enable tx/rx */
+  *AUX_MU_CNTL_REG = 3;   /* Enable transmitter and receiver */
 }
+
 
 /**
  * Write to uart

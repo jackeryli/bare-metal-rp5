@@ -24,3 +24,29 @@ strncmp(const char* p, const char* q, uint n)
   if(n == 0) return 0;
   return (uchar)*p - (uchar)*q;
 }
+
+int
+strlen(const char* c)
+{
+  int n;
+  for(n=0; c[n]; n++)
+    ;
+  return n;
+}
+
+void
+strreverse(char* p, uint start, uint end)
+{
+  int n = strlen(p);
+  if(n == 0) return;
+  if(start >= n || end >= n) return;
+  
+  char tmp;
+  while(start < end){
+    tmp = p[start];
+    p[start] = p[end];
+    p[end] = tmp;
+    start++;
+    end--;
+  }
+}

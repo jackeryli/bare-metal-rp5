@@ -48,7 +48,7 @@ execute(char* cmd)
       return cmds[i].func(argv);
     }
   }
-  printk("sh.c: unknown command\n");
+  printk("sh.c: unknown command");
   return -1;
 }
 
@@ -74,6 +74,7 @@ runsh(void)
     buf[i] = '\0';
     uartputc('\n');
     execute(buf);
+    uartputc('\n');
   }
 }
 
@@ -81,10 +82,11 @@ int
 help(char**)
 {
   for(int i=0; i<NCOMMANDS; i++){
-    printk(cmds[i].name);
-    printk(": ");
-    printk(cmds[i].msg);
-    printk("\n");
+    if(i != 0) printk("\n");
+    // printk(cmds[i].name);
+    // printk(": ");
+    // printk(cmds[i].msg);
+    printk("%s: %s", cmds[i].name, cmds[i].msg);
   }
   return 0;
 }
@@ -92,7 +94,7 @@ help(char**)
 int
 hello(char**)
 {
-  printk("Hello world\n");
+  printk("Hello world");
   return 0;
 }
 
@@ -101,8 +103,9 @@ timestamp(char**)
 {
   uint64 cnt = r_cntpct_el0();
   uint64 freq = r_cntfrq_el0();
-  printk(cnt);
-  printk(freq);
+
+  printk("cntpct_el0=%d, cntfrq_el0=%d\n", cnt, freq);
+  printk("%d", cnt/freq);
   return 0;
 }
 
